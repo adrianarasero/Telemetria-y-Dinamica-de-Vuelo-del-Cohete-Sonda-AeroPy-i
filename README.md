@@ -1,1 +1,1 @@
-# Senda-de-Aterrizaje-y-Dinamica-de-Frenado-de-una-Aeronave-Comercial
+# Telemetrıa y Dinamica de Vuelo del Cohete Sonda “AeroPy-I”
