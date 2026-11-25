@@ -1,8 +1,18 @@
-# math.py
 import numpy as np
 from scipy.linalg import solve, lu_factor, lu_solve
 from scipy.optimize import bisect, newton as scipy_newton
 
+def my_dot(U:np.ndarray, V:np.ndarray) -> float:
+    return sum(U[i] * V[i] for i in range(len(U)))
+
+def my_matmul(A:np.ndarray, B:np.ndarray) -> np.ndarray:
+    N, M = np.shape(A)
+    return np.array([[my_dot(A[i,:], B[:,j])for j in range (M)] for i in range (N)])
+
+def my_traspose(A:np.ndarray)-> np.ndarray:
+    N = np.shape(A)[0] 
+    M = np.shape(A)[1]   
+    return np.array([[A[j, i]for j in range(N)] for i in range(M)])
 # ==========================================
 # 1. SISTEMAS LINEALES
 # ==========================================
@@ -28,7 +38,7 @@ def my_gauss(A_in, b_in):
     b = b_in.copy().astype(float)
     N = len(b)
     x = np.zeros(N) 
-    for i in range(0, N): 
+    for i in range(N): 
         pivoting_row_swapping(A, b, i, N)
         for k in range(i+1, N):  
             c = A[k, i] / A[i, i]  
@@ -83,15 +93,15 @@ def my_gauss_seidel(A, b):
 # ==========================================
 # 2. REGRESIÓN
 # ==========================================
-def Vandermonde_reg(x, N, M): 
+def my_vandermonde_reg(x, N, M): 
     return np.array([[x[j]**i for i in range(N)] for j in range(M)]) 
 
 def my_regression(x, y, degree=1):
     """Regresión por mínimos cuadrados con Vandermonde propio"""
     M = len(x)
     N = degree + 1
-    A = Vandermonde_reg(x, N, M) 
-    w = solve(np.dot(A.T, A), np.dot(A.T, y))
+    A = my_vandermonde_reg(x, N, M) 
+    w = my_gauss(my_dot(A.T, A), my_dot(A.T, y))
     return w  # Coeficientes [c0, c1, ...]
 
 def numpy_regression(x, y, degree=1):
@@ -125,5 +135,5 @@ def my_interpolation_vandermonde(x, y):
     """Interpolación exacta por matriz de Vandermonde"""
     N = len(x)
     A = np.array([[x[i]**j for j in range(N)] for i in range(N)])
-    return solve(A, y)
+    return my_gauss(A, y)
 
