@@ -137,3 +137,21 @@ def my_interpolation_vandermonde(x, y):
     A = np.array([[x[i]**j for j in range(N)] for i in range(N)])
     return my_gauss(A, y)
 
+# ==========================================
+# 4. INTEGRACIÓN
+# ==========================================
+def my_trapecio(y, dx):
+    """Regla del trapecio con arrays"""
+    return dx / 2 * (y[0] + y[-1] + 2 * np.sum(y[1:-1]))
+
+def my_simpson(y, dx):
+    """Regla de Simpson con arrays"""
+    N = len(y) - 1
+    if N % 2 != 0:
+        # Ajuste simple si N no es par
+        N = N - 1
+    return dx / 3 * (y[0] + y[N] + 4 * np.sum(y[1:N:2]) + 2 * np.sum(y[2:N-1:2]))
+
+def numpy_integration(y, x):
+    """Integración con numpy (trapz)."""
+    return np.trapz(y, x)
