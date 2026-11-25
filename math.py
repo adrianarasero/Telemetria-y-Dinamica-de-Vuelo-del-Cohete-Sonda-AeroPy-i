@@ -155,3 +155,32 @@ def my_simpson(y, dx):
 def numpy_integration(y, x):
     """Integración con numpy (trapz)."""
     return np.trapz(y, x)
+    
+# ==========================================
+# 5. DERIVACIÓN
+# ==========================================
+def my_3ptos_centrados(y, dx):
+    """Diferencias finitas centradas de 2º orden."""
+    dydx = np.zeros_like(y)
+    dydx[1:-1] = (y[2:] - y[:-2]) / (2 * dx)
+    dydx[0] = (y[1] - y[0]) / dx
+    dydx[-1] = (y[-1] - y[-2]) / dx
+    return dydx
+
+def my_3ptos_adelantados(y, dx):
+    """Diferencias finitas adelantadas."""
+    dydx = np.zeros_like(y)
+    dydx[:-2] = (-3*y[:-2] + 4*y[1:-1] - y[2:]) / (2*dx) # o aproximación de primer orden
+    dydx[-2:] = (y[-1] - y[-2]) / dx
+    return dydx
+
+def my_3ptos_retrasados(y, dx):
+    """Diferencias finitas retrasadas."""
+    dydx = np.zeros_like(y)
+    dydx[1:] = (y[1:] - y[:-1]) / dx
+    dydx[0] = dydx[1]
+    return dydx
+
+def numpy_derivation(y, x):
+    """Derivación con numpy.gradient."""
+    return np.gradient(y, x)
