@@ -45,7 +45,7 @@ def my_gauss(A_in, b_in):
             A[k, :] = A[k, :] - c * A[i, :] 
             b[k] = b[k] - c * b[i] 
     for i in range(N-1, -1, -1):
-        x[i] = (b[i] - np.dot(A[i, i+1:N], x[i+1:N])) / A[i, i]
+        x[i] = (b[i] - my_dot(A[i, i+1:N], x[i+1:N])) / A[i, i]
     return x
 
 def solver_lu(A, b):
@@ -69,7 +69,7 @@ def my_jacobi(A, b):
                 R[i, j] = A[i, j]
     while np.norm(xn - x) > tolerance and k < max_iter: 
         x = xn
-        xn = (b - np.dot(R, x)) / D
+        xn = (b - my_dot(R, x)) / D
         k += 1
     return xn
 
@@ -82,9 +82,9 @@ def my_gauss_seidel(A, b):
     while Error > tolerance and k < max_iter: 
         x1[:] = x2[:]  
         for i in range(N):
-            b1[i] = b[i] - np.dot(A[i, i+1:], x1[i+1:])  
+            b1[i] = b[i] - my_dot(A[i, i+1:], x1[i+1:])  
         for i in range(N):
-            x2[i] = (b1[i] - np.dot(A[i, :i], x2[:i])) / A[i, i] 
+            x2[i] = (b1[i] - my_dot(A[i, :i], x2[:i])) / A[i, i] 
         Error = np.linalg.norm(x2 - x1)
         k += 1
     return x2
@@ -129,7 +129,7 @@ def Lagrange_polynomials(x, xp):
 def my_interpolation_lagrange(x, y, xp_val):
     """Interpolación mediante polinomios de Lagrange propios"""
     L = Lagrange_polynomials(x, xp_val)
-    return np.dot(L[0, :], y)
+    return my_dot(L[0, :], y)
 
 def my_interpolation_vandermonde(x, y):
     """Interpolación exacta por matriz de Vandermonde"""
